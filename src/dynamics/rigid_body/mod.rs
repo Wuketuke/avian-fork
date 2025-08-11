@@ -617,32 +617,14 @@ pub(crate) struct PreSolveAngularVelocity(pub Scalar);
 #[reflect(Component)]
 pub(crate) struct PreSolveAngularVelocity(pub Vector);
 
-/// Controls how [gravity](Gravity) affects a specific [rigid body](RigidBody).
-///
-/// A gravity scale of `0.0` will disable gravity, while `2.0` will double the gravity.
-/// Using a negative value will flip the direction of the gravity.
-///
-/// # Example
-///
-/// ```
-#[cfg_attr(feature = "2d", doc = "use avian2d::prelude::*;")]
-#[cfg_attr(feature = "3d", doc = "use avian3d::prelude::*;")]
-/// use bevy::prelude::*;
-///
-/// // Spawn a dynamic body with `1.5` times the normal gravity.
-/// fn setup(mut commands: Commands) {
-///     commands.spawn((RigidBody::Dynamic, GravityScale(1.5)));
-/// }
-/// ```
-#[derive(Component, Reflect, Debug, Clone, Copy, PartialEq, PartialOrd, Deref, DerefMut, From)]
+#[derive(Component, Reflect, Debug, Clone, Copy, PartialEq, Deref, DerefMut, From)]
 #[cfg_attr(feature = "serialize", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "serialize", reflect(Serialize, Deserialize))]
-#[reflect(Debug, Component, Default, PartialEq)]
-pub struct GravityScale(pub Scalar);
-
-impl Default for GravityScale {
-    fn default() -> Self {
-        Self(1.0)
+/// The local gravity for that object
+pub struct LocalGravity(pub Vector);
+impl Default for LocalGravity{
+    fn default() -> Self{
+        Self(Vector::NEG_Y * GRAVITY)
     }
 }
 

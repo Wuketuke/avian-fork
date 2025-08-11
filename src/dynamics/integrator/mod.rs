@@ -45,8 +45,6 @@ impl Default for IntegratorPlugin {
 
 impl Plugin for IntegratorPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<Gravity>();
-
         app.configure_sets(
             self.schedule.intern(),
             (IntegrationSet::Velocity, IntegrationSet::Position).chain(),
@@ -90,58 +88,6 @@ pub enum IntegrationSet {
     Position,
 }
 
-/// A resource for the global gravitational acceleration.
-///
-/// The default is an acceleration of 9.81 m/s^2 pointing down, which is approximate to the gravitational
-/// acceleration near Earth's surface. Note that if you are using pixels as length units in 2D,
-/// this gravity will be tiny. You should modify the gravity to fit your application.
-///
-/// You can also control how gravity affects a specific [rigid body](RigidBody) using the [`GravityScale`]
-/// component. The magnitude of the gravity will be multiplied by this scaling factor.
-///
-/// # Example
-///
-/// ```no_run
-#[cfg_attr(feature = "2d", doc = "use avian2d::prelude::*;")]
-#[cfg_attr(feature = "3d", doc = "use avian3d::prelude::*;")]
-/// use bevy::prelude::*;
-///
-/// # #[cfg(feature = "f32")]
-/// fn main() {
-///     App::new()
-///         .add_plugins((DefaultPlugins, PhysicsPlugins::default()))
-#[cfg_attr(
-    feature = "2d",
-    doc = "         .insert_resource(Gravity(Vec2::NEG_Y * 100.0))"
-)]
-#[cfg_attr(
-    feature = "3d",
-    doc = "         .insert_resource(Gravity(Vec3::NEG_Y * 19.6))"
-)]
-///         .run();
-/// }
-/// # #[cfg(not(feature = "f32"))]
-/// # fn main() {} // Doc test needs main
-/// ```
-///
-/// You can also modify gravity while the app is running.
-#[derive(Reflect, Resource, Debug)]
-#[cfg_attr(feature = "serialize", derive(serde::Serialize, serde::Deserialize))]
-#[cfg_attr(feature = "serialize", reflect(Serialize, Deserialize))]
-#[reflect(Debug, Resource)]
-pub struct Gravity(pub Vector);
-
-impl Default for Gravity {
-    fn default() -> Self {
-        Self(Vector::Y * -9.81)
-    }
-}
-
-impl Gravity {
-    /// Zero gravity.
-    pub const ZERO: Gravity = Gravity(Vector::ZERO);
-}
-
 #[derive(QueryData)]
 #[query_data(mutable)]
 struct VelocityIntegrationQuery {
@@ -162,19 +108,17 @@ struct VelocityIntegrationQuery {
     ang_damping: Option<&'static AngularDamping>,
     max_linear_speed: Option<&'static MaxLinearSpeed>,
     max_angular_speed: Option<&'static MaxAngularSpeed>,
-    gravity_scale: Option<&'static GravityScale>,
+    local_gravity: Option<&'static LocalGravity>,
     locked_axes: Option<&'static LockedAxes>,
 }
 
 #[allow(clippy::type_complexity)]
 fn integrate_velocities(
     mut bodies: Query<VelocityIntegrationQuery, RigidBodyActiveFilter>,
-    gravity: Res<Gravity>,
     time: Res<Time>,
     mut diagnostics: ResMut<SolverDiagnostics>,
 ) {
     let start = crate::utils::Instant::now();
-
     let delta_secs = time.delta_seconds_adjusted();
 
     bodies.par_iter_mut().for_each(|mut body| {
@@ -211,7 +155,10 @@ fn integrate_velocities(
 
             let external_force = body.force.force();
             let external_torque = body.torque.torque() + body.force.torque();
-            let gravity = gravity.0 * body.gravity_scale.map_or(1.0, |scale| scale.0);
+            let gravity = match body.local_gravity {
+                Some(down) => down.0,
+                None => Vector::NEG_Y * GRAVITY,
+            };
 
             semi_implicit_euler::integrate_velocity(
                 &mut body.lin_vel.0,

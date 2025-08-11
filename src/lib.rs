@@ -537,6 +537,7 @@ pub mod prelude {
         position::{PreSolveAccumulatedTranslation, PreSolveRotation, PreviousRotation},
     };
     pub use avian_derive::*;
+    pub use local_bevy_core::*;
 }
 
 mod utils;

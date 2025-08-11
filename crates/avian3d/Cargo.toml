@@ -13,14 +13,14 @@ categories = ["game-development", "science", "simulation"]
 
 [features]
 default = [
-    "3d",
-    "f32",
-    "parry-f32",
-    "collider-from-mesh",
-    "bevy_scene",
-    "bevy_picking",
-    "debug-plugin",
-    "parallel",
+  "3d",
+  "f32",
+  "parry-f32",
+  "collider-from-mesh",
+  "bevy_scene",
+  "bevy_picking",
+  "debug-plugin",
+  "parallel",
 ]
 3d = []
 f32 = []
@@ -29,17 +29,17 @@ f64 = []
 debug-plugin = ["bevy/bevy_gizmos", "bevy/bevy_render"]
 simd = ["parry3d?/simd-stable", "parry3d-f64?/simd-stable"]
 parallel = [
-    "dep:thread_local",
-    "bevy/multi_threaded",
-    "parry3d?/parallel",
-    "parry3d-f64?/parallel",
+  "dep:thread_local",
+  "bevy/multi_threaded",
+  "parry3d?/parallel",
+  "parry3d-f64?/parallel",
 ]
 enhanced-determinism = [
-    "dep:libm",
-    "bevy_math/libm",
-    "bevy_heavy/libm",
-    "parry3d?/enhanced-determinism",
-    "parry3d-f64?/enhanced-determinism",
+  "dep:libm",
+  "bevy_math/libm",
+  "bevy_heavy/libm",
+  "parry3d?/enhanced-determinism",
+  "parry3d-f64?/enhanced-determinism",
 ]
 
 default-collider = ["dep:nalgebra"]
@@ -52,13 +52,13 @@ collider-from-mesh = ["bevy/bevy_render", "3d"]
 bevy_scene = ["bevy/bevy_scene"]
 bevy_picking = ["bevy/bevy_picking"]
 serialize = [
-    "dep:serde",
-    "bevy/serialize",
-    "bevy_heavy/serialize",
-    "bevy_transform_interpolation/serialize",
-    "parry3d?/serde-serialize",
-    "parry3d-f64?/serde-serialize",
-    "bitflags/serde",
+  "dep:serde",
+  "bevy/serialize",
+  "bevy_heavy/serialize",
+  "bevy_transform_interpolation/serialize",
+  "parry3d?/serde-serialize",
+  "parry3d-f64?/serde-serialize",
+  "bitflags/serde",
 ]
 
 # Enables writing timer and counter information to the `DiagnosticsStore` in `bevy_diagnostic`.
@@ -74,10 +74,11 @@ required-features = ["3d"]
 bench = false
 
 [dependencies]
+local_bevy_core = { path = "../../../local_bevy_core" }
 avian_derive = { path = "../avian_derive", version = "0.2" }
 bevy = { version = "0.16", default-features = false, features = [
-    "std",
-    "bevy_log",
+  "std",
+  "bevy_log",
 ] }
 bevy_math = { version = "0.16" }
 bevy_heavy = { version = "0.2" }
@@ -96,8 +97,8 @@ thread_local = { version = "1.1", optional = true }
 examples_common_3d = { path = "../examples_common_3d" }
 benches_common_3d = { path = "../benches_common_3d" }
 bevy = { version = "0.16", default-features = false, features = [
-    "bevy_gltf",
-    "animation",
+  "bevy_gltf",
+  "animation",
 ] }
 bevy_math = { version = "0.16", features = ["approx"] }
 bevy_heavy = { version = "0.2", features = ["approx"] }

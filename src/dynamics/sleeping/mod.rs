@@ -39,7 +39,7 @@ impl Plugin for SleepingPlugin {
         physics_schedule.add_systems(
             (
                 wake_on_changed,
-                wake_all_sleeping_bodies.run_if(resource_changed::<Gravity>),
+                // wake_all_sleeping_bodies.run_if(resource_changed::<Gravity>),
                 mark_sleeping_bodies,
             )
                 .chain()
@@ -240,7 +240,6 @@ pub(crate) fn wake_on_changed(
                 Changed<ExternalTorque>,
                 Changed<ExternalImpulse>,
                 Changed<ExternalAngularImpulse>,
-                Changed<GravityScale>,
             )>,
         >,
     )>,

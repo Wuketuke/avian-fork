@@ -74,7 +74,7 @@ pub mod prelude {
     };
     pub use super::{
         ccd::{CcdPlugin, SpeculativeMargin, SweepMode, SweptCcd},
-        integrator::{Gravity, IntegratorPlugin},
+        integrator::IntegratorPlugin,
         rigid_body::{
             mass_properties::{
                 bevy_heavy::{
