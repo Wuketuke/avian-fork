@@ -77,9 +77,9 @@ pub use total::{PhysicsTotalDiagnostics, PhysicsTotalDiagnosticsPlugin};
 
 use crate::{schedule::PhysicsSchedule, PhysicsStepSet};
 use bevy::{
-    app::{App, Plugin},
-    diagnostic::{Diagnostic, DiagnosticPath, Diagnostics, RegisterDiagnostic},
-    prelude::{IntoScheduleConfigs, Res, ResMut, Resource, SystemSet},
+    app::App,
+    diagnostic::DiagnosticPath,
+    prelude::{IntoScheduleConfigs, ResMut, Resource, SystemSet},
 };
 use core::time::Duration;
 

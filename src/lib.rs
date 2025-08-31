@@ -1,3 +1,7 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+#![allow(mismatched_lifetime_syntaxes)]
+
 //! ![Avian Physics](https://raw.githubusercontent.com/Jondolf/avian/avian/assets/branding/logo.svg)
 //!
 //! **Avian** is an ECS-driven 2D and 3D physics engine for the [Bevy game engine](https://bevyengine.org/).
